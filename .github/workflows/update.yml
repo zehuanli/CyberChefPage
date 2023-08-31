@@ -47,7 +47,7 @@ jobs:
           echo "New release detected. Proceed with updating."
         else
           echo "No new release. Skipping update."
-          exit 0  # Exit the workflow if there's no new release
+          exit 1  # Exit the workflow if there's no new release
         fi
 
     - name: Download Release Assets
