@@ -5,17 +5,13 @@ on:
     - cron: '0 0 1 * *'  # Run on the 1st day of every month at midnight
 
 jobs:
-  update:
+  check:
     runs-on: ubuntu-latest
-
+    outputs:
+      need_update: ${{ steps.compare_versions.outputs.need_update }}
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
-
-    - name: Set Git Config
-      run: |
-        git config --global user.name $(curl -s "https://api.github.com/users/${GITHUB_ACTOR}" | jq -r '.name')
-        git config --global user.email "${GITHUB_ACTOR_ID}+${GITHUB_ACTOR}@users.noreply.github.com"
 
     - name: Get Stored Release Version
       id: stored_release
@@ -26,10 +22,6 @@ jobs:
           stored_version="0.0.0"  # Set a default version
         fi
         echo "version=$stored_version" >> $GITHUB_OUTPUT
-
-    - name: Delete Existing Files except CNAME
-      run: |
-        find . -type f ! -name 'CNAME' ! -path '*/.*' -exec rm -f {} \;
 
     - name: Get Latest Release Info
       id: latest_release
@@ -44,11 +36,28 @@ jobs:
         stored_version="${{ steps.stored_release.outputs.version }}"
 
         if [[ "$latest_version" != "$stored_version" ]]; then
-          echo "New release detected. Proceed with updating."
+          echo "need_update=true" >> $GITHUB_OUTPUT
         else
-          echo "No new release. Skipping update."
-          exit 1  # Exit the workflow if there's no new release
+          echo "need_update=false" >> $GITHUB_OUTPUT
         fi
+
+  update:
+    needs: check
+    if: ${{ needs.check.outputs.need_update == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Delete Existing Files except CNAME
+      run: |
+        find . -type f ! -name 'CNAME' ! -path '*/.*' -exec rm -f {} \;
+
+    - name: Get Latest Release Info
+      id: latest_release
+      run: |
+        release_info=$(curl -s "https://api.github.com/repos/gchq/CyberChef/releases/latest")
+        echo "tag_name=$(echo $release_info | jq -r '.tag_name')" >> $GITHUB_OUTPUT
 
     - name: Download Release Assets
       id: download_assets
@@ -69,6 +78,11 @@ jobs:
     - name: Store New Version
       run: |
         echo "${{ steps.latest_release.outputs.tag_name }}" > source_version.txt
+
+    - name: Set Git Config
+      run: |
+        git config --global user.name $(curl -s "https://api.github.com/users/${GITHUB_ACTOR}" | jq -r '.name')
+        git config --global user.email "${GITHUB_ACTOR_ID}+${GITHUB_ACTOR}@users.noreply.github.com"
 
     - name: Update Repository
       run: |
