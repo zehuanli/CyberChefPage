@@ -1,0 +1,78 @@
+name: Update with Latest Release
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 1 * *'  # Run on the 1st day of every month at midnight
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set Git Config
+      run: |
+        git config --global user.name $(curl -s "https://api.github.com/users/${GITHUB_ACTOR}" | jq -r '.name')
+        git config --global user.email "${GITHUB_ACTOR_ID}+${GITHUB_ACTOR}@users.noreply.github.com"
+
+    - name: Get Stored Release Version
+      id: stored_release
+      run: |
+        if [ -f source_version.txt ]; then
+          stored_version=$(cat source_version.txt)
+        else
+          stored_version="0.0.0"  # Set a default version
+        fi
+        echo "version=$stored_version" >> $GITHUB_OUTPUT
+
+    - name: Delete Existing Files except CNAME
+      run: |
+        find . -type f ! -name 'CNAME' ! -path '*/.*' -exec rm -f {} \;
+
+    - name: Get Latest Release Info
+      id: latest_release
+      run: |
+        release_info=$(curl -s "https://api.github.com/repos/gchq/CyberChef/releases/latest")
+        echo "tag_name=$(echo $release_info | jq -r '.tag_name')" >> $GITHUB_OUTPUT
+
+    - name: Compare Versions
+      id: compare_versions
+      run: |
+        latest_version="${{ steps.latest_release.outputs.tag_name }}"
+        stored_version="${{ steps.stored_release.outputs.version }}"
+
+        if [[ "$latest_version" != "$stored_version" ]]; then
+          echo "New release detected. Proceed with updating."
+        else
+          echo "No new release. Skipping update."
+          exit 0  # Exit the workflow if there's no new release
+        fi
+
+    - name: Download Release Assets
+      id: download_assets
+      run: |
+        tag_name="${{ steps.latest_release.outputs.tag_name }}"
+        asset_name="CyberChef_${tag_name}.zip"
+        asset_url="https://github.com/gchq/CyberChef/releases/download/$tag_name/$asset_name"
+        curl -LO "$asset_url"
+        echo "asset_name=$asset_name" >> $GITHUB_OUTPUT
+
+    - name: File operations
+      run: |
+        unzip ${{ steps.download_assets.outputs.asset_name }}
+        rm ${{ steps.download_assets.outputs.asset_name }}
+        tag_name="${{ steps.latest_release.outputs.tag_name }}"
+        mv CyberChef_${tag_name}.html index.html
+
+    - name: Store New Version
+      run: |
+        echo "${{ steps.latest_release.outputs.tag_name }}" > source_version.txt
+
+    - name: Update Repository
+      run: |
+        git add .
+        new_version="${{ steps.latest_release.outputs.tag_name }}"
+        git commit -m "Update to $new_version"
+        git push
