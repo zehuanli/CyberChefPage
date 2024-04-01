@@ -5,6 +5,14 @@
  * @license  MIT
  */
 
+/*!
+ * urlsafe-base64
+ */
+
+/*! cptable.js (C) 2013-present SheetJS -- http://sheetjs.com */
+
+/*! cputils.js (C) 2013-present SheetJS -- http://sheetjs.com */
+
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 
 /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
@@ -193,6 +201,12 @@
  */
 
 /**
+ * @author arnydo [github@arnydo.com]
+ * @copyright Crown Copyright 2019
+ * @license Apache-2.0
+ */
+
+/**
  * @author bmwhitn [brian.m.whitney@outlook.com]
  * @copyright Crown Copyright 2017
  * @license Apache-2.0
@@ -232,6 +246,13 @@
  */
 
 /**
+ * @author devcydo [devcydo@gmail.com]
+ * @author Ma Bingyao [mabingyao@gmail.com]
+ * @copyright Crown Copyright 2022
+ * @license Apache-2.0
+ */
+
+/**
  * @author gchq77703 []
  * @author n1474335 [n1474335@gmail.com]
  * @copyright Crown Copyright 2018
@@ -265,6 +286,12 @@
 /**
  * @author joostrijneveld [joost@joostrijneveld.nl]
  * @copyright Crown Copyright 2022
+ * @license Apache-2.0
+ */
+
+/**
+ * @author joostrijneveld [joost@joostrijneveld.nl]
+ * @copyright Crown Copyright 2024
  * @license Apache-2.0
  */
 
@@ -402,6 +429,12 @@
 /**
  * @author tcode2k16 [tcode2k16@gmail.com]
  * @copyright Crown Copyright 2018
+ * @license Apache-2.0
+ */
+
+/**
+ * @author tcode2k16 [tcode2k16@gmail.com]
+ * @copyright Crown Copyright 2019
  * @license Apache-2.0
  */
 
