@@ -246,13 +246,6 @@
  */
 
 /**
- * @author devcydo [devcydo@gmail.com]
- * @author Ma Bingyao [mabingyao@gmail.com]
- * @copyright Crown Copyright 2022
- * @license Apache-2.0
- */
-
-/**
  * @author gchq77703 []
  * @author n1474335 [n1474335@gmail.com]
  * @copyright Crown Copyright 2018
@@ -280,18 +273,6 @@
 /**
  * @author j433866 [j433866@gmail.com]
  * @copyright Crown Copyright 2019
- * @license Apache-2.0
- */
-
-/**
- * @author joostrijneveld [joost@joostrijneveld.nl]
- * @copyright Crown Copyright 2022
- * @license Apache-2.0
- */
-
-/**
- * @author joostrijneveld [joost@joostrijneveld.nl]
- * @copyright Crown Copyright 2024
  * @license Apache-2.0
  */
 
@@ -416,7 +397,7 @@
 
 /**
  * @author sw5678
- * @copyright Crown Copyright 2016
+ * @copyright Crown Copyright 2023
  * @license Apache-2.0
  */
 
@@ -465,6 +446,12 @@
  */
 
 /**
+ * @author tomgond [tom.gonda@gmail.com]
+ * @copyright Crown Copyright 2024
+ * @license Apache-2.0
+ */
+
+/**
  * Base45 resources.
  *
  * @author Thomas Weißschuh [thomas@t-8ch.de]
@@ -502,16 +489,6 @@
  *
  * @author sg5506844 [sg5506844@gmail.com]
  * @copyright Crown Copyright 2021
- * @license Apache-2.0
- */
-
-/**
- * Based on murmurhash-js (https://github.com/garycourt/murmurhash-js)
- * @author Gary Court
- * @license MIT
- *
- * @author AliceGrey [alice@grey.systems]
- * @copyright Crown Copyright 2024
  * @license Apache-2.0
  */
 
